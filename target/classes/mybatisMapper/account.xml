@@ -4,6 +4,54 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zzu.erepair">
     <select id="checkAccount" parameterType="com.zzu.erepair.account.bean.AccountInfo" resultType="com.zzu.erepair.account.bean.AccountInfo">
-		select username,priority from account where username=#{username} and password=#{password}
+		SELECT
+			username,
+			priority
+		FROM
+			account
+		WHERE
+			username = #{username}
+			AND
+			password = #{password}
 	</select>
+	<select id="askRepairCheck" resultType="com.zzu.erepair.account.bean.AccountInfo">
+		SELECT
+			bill_id,
+			building,
+			floor,
+			equipment_name,
+			askRepair_name,
+			remark,
+			img_url AS imgURL,
+			position,
+			state,
+			ask_date AS askDateD
+		FROM
+			bill
+	</select>
+	<insert id="askRepairNew" parameterType="com.zzu.erepair.account.bean.AccountInfo">
+		INSERT INTO bill (
+			username,
+			bill_id,
+			building,
+			floor,
+			equipment_name,
+			remark,
+			img_url,
+			position,
+			equipment_type,
+			ask_date )
+		VALUES (
+			#{username},
+			#{billId},
+			#{building},
+			#{floor},
+			#{equipmentName},
+			#{remark},
+			#{imgURL},
+			#{position},
+			#{equipmentType},
+			#{askDateD}
+		)
+	</insert>
 </mapper>
