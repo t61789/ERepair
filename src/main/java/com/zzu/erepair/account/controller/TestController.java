@@ -1,5 +1,6 @@
 package com.zzu.erepair.account.controller;
 
+import com.zzu.erepair.account.bean.AccountInfo;
 import com.zzu.erepair.utility.SecurityKeys;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +17,11 @@ public class TestController {
 
     @RequestMapping("/test")
     @ResponseBody
-    public Object test(@RequestBody String str) {
+    public Object test(@RequestBody AccountInfo info) {
 
         Object result = "-1";
         try {
-            result = securityKeys.getSecurityMD5("334");
+            result = securityKeys.getSecurityMD5(info.username);
         } catch (Exception e) {
             e.printStackTrace();
         }

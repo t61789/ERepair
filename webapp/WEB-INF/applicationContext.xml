@@ -21,4 +21,5 @@ http://www.springframework.org/schema/context
 
     <bean id="commonProperties" class="com.zzu.erepair.utility.CommonProperties" init-method="init"/>
     <bean id="securityKeys" class="com.zzu.erepair.utility.SecurityKeys" init-method="init"/>
+    <bean id="utility" class="com.zzu.erepair.utility.Utility" init-method="init"/>
 </beans>

@@ -12,6 +12,20 @@ public class AccountDao extends SqlSessionDaoSupportAbstract implements IAccount
         AccountInfo param = new AccountInfo();
         param.username = username;
         param.password = passwordMd5;
+
         return this.getSqlSession().selectOne("com.zzu.erepair.checkAccount",param);
+    }
+
+    @Override
+    public AccountInfo askRepairCheck() {
+        AccountInfo result = new AccountInfo();
+        result.bills = this.getSqlSession().selectList("com.zzu.erepair.askRepairCheck");
+
+        return result;
+    }
+
+    @Override
+    public void askRepairNew(AccountInfo info) {
+        this.getSqlSession().insert("com.zzu.erepair.askRepairNew",info);
     }
 }
