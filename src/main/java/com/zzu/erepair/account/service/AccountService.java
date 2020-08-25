@@ -28,8 +28,6 @@ public class AccountService implements  IAccountService{
     @Resource
     private CommonProperties commonProperties;
 
-    @Resource
-    private Utility utility;
 
     @Override
     public Object login(String username, String password, HttpServletRequest request) {
@@ -44,12 +42,7 @@ public class AccountService implements  IAccountService{
     @Override
     public Object askRepairCheck() {
 
-        AccountInfo result = accountDao.askRepairCheck();
-        for (AccountInfo a : result.bills){
-            a.askDate = utility.Ltime2Stime(a.askDateD);
-            a.askDateD = null;
-        }
-        return result;
+        return accountDao.askRepairCheck();
     }
 
     @Override
@@ -101,6 +94,46 @@ public class AccountService implements  IAccountService{
             e.printStackTrace();
             return "0";
         }
+    }
+
+    @Override
+    public Object assignmentCheck() {
+
+        return accountDao.assignmentCheck();
+    }
+
+    @Override
+    public Object assignmentAssignees() {
+
+        return accountDao.assignmentAssignees();
+    }
+
+    @Override
+    public Object assignment(String assignee, int[] billIds) {
+
+        try{
+            accountDao.assignment(assignee,billIds);
+        }catch(Exception e){
+            return "0";
+        }
+        return "1";
+    }
+
+    @Override
+    public Object repairCheck(HttpServletRequest request) {
+        String username = (String) request.getSession().getAttribute("username");
+
+        return accountDao.repairCheck(username);
+    }
+
+    @Override
+    public Object repair(String repairRemark, int[] billIds) {
+        try{
+            accountDao.repair(repairRemark, billIds,LocalDateTime.now());
+        }catch(Exception e){
+            return "0";
+        }
+        return "1";
     }
 
     private int[] castInta(String[] s){

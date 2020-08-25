@@ -20,7 +20,7 @@
 			building,
 			floor,
 			equipment_name,
-			askRepair_name,
+			ask_repair_name,
 			remark,
 			img_url AS imgURL,
 			position,
@@ -54,4 +54,29 @@
 			#{askDateD}
 		)
 	</insert>
+	<select id="assignmentCheck" resultType="com.zzu.erepair.account.bean.AccountInfo">
+		SELECT
+			bill_id,
+			building,
+			floor,
+			equipment_name,
+			remark,
+			img_url,
+			position,
+			ask_date as askDateD,
+			state,
+			assignee
+		FROM
+			bill
+	</select>
+	<update id="assignment" parameterType="com.zzu.erepair.account.bean.AccountInfo">
+		UPDATE bill
+		SET state = 1,
+		assignee = #{assignee}
+		WHERE
+			bill_id IN
+		<foreach collection="billIds" item="billId" open="(" separator="," close=")">
+			#{billId}
+		</foreach>
+	</update>
 </mapper>

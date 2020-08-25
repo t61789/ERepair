@@ -59,7 +59,6 @@ public class AccountController {
         return result;
     }
 
-    // TODO: 2020/8/24 done here
     @RequestMapping("/askRepairUploadImg")
     @ResponseBody
     public Object askRepairUploadImg(@RequestParam MultipartFile img) {
@@ -76,11 +75,81 @@ public class AccountController {
 
     @RequestMapping("/askRepairNew")
     @ResponseBody
-    public Object askRepairNew(@RequestParam AccountInfo info,HttpServletRequest request) {
+    public Object askRepairNew(@RequestBody AccountInfo info,HttpServletRequest request) {
 
         Object result = "-1";
         try {
             result = accountService.askRepairNew(info,request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @RequestMapping("/assignmentCheck")
+    @ResponseBody
+    public Object assignmentCheck() {
+
+        Object result = "-1";
+        try {
+            result = accountService.assignmentCheck();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @RequestMapping("/assignmentAssignees")
+    @ResponseBody
+    public Object assignmentAssignees() {
+
+        Object result = "-1";
+        try {
+            result = accountService.assignmentAssignees();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @RequestMapping("/assignment")
+    @ResponseBody
+    public Object assignment(@RequestBody AccountInfo info) {
+
+        Object result = "-1";
+        try {
+            result = accountService.assignment(info.assignee,info.billIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @RequestMapping("/repairCheck")
+    @ResponseBody
+    public Object repairCheck(HttpServletRequest request) {
+
+        Object result = "-1";
+        try {
+            result = accountService.repairCheck(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @RequestMapping("/repair")
+    @ResponseBody
+    public Object repair(@RequestBody AccountInfo info) {
+
+        Object result = "-1";
+        try {
+            result = accountService.repair(info.repairRemark,info.billIds);
         } catch (Exception e) {
             e.printStackTrace();
         }

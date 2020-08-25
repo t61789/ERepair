@@ -17,4 +17,14 @@ public interface IAccountService {
     Object askRepairUploadImg(MultipartFile img);
 
     Object askRepairNew(AccountInfo info, HttpServletRequest request);
+
+    Object assignmentCheck();
+
+    Object assignmentAssignees();
+
+    Object assignment(String assignee,int[] billIds);
+
+    Object repairCheck(HttpServletRequest request);
+
+    Object repair(String repairRemark,int[] billIds);
 }
