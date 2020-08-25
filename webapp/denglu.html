@@ -40,11 +40,11 @@
                                 this.send("login",{username:this.username,password:this.password},function (msg){
                                     if(msg.status === 1){
                                         if(msg.priority === 0)
-                                            window.location.href='./equipment.html';
+                                            window.location.href='equipment.html';
                                         else  if(msg.priority === 1)
-                                            window.location.href='./report.html';
+                                            window.location.href='report.html';
                                         else  if(msg.priority === 2)
-                                            window.location.href='./repair.html';
+                                            window.location.href='repair.html';
 
                                     }
                                     else alert("用户名或密码错误");
