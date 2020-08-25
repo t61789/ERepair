@@ -30,8 +30,10 @@ public class AccountDao extends SqlSessionDaoSupportAbstract implements IAccount
         result.bills = this.getSqlSession().selectList("com.zzu.erepair.askRepairCheck");
 
         for (AccountInfo a : result.bills){
-            a.askDate = utility.Ltime2Stime(a.askDateD);
-            a.askDateD = null;
+            if(a.askDateD!=null){
+                a.askDate = utility.Ltime2Stime(a.askDateD);
+                a.askDateD = null;
+            }
         }
 
         return result;
@@ -48,8 +50,10 @@ public class AccountDao extends SqlSessionDaoSupportAbstract implements IAccount
         result.bills = this.getSqlSession().selectList("com.zzu.erepair.assignmentCheck");
 
         for (AccountInfo a : result.bills){
-            a.askDate = utility.Ltime2Stime(a.askDateD);
-            a.askDateD = null;
+            if(a.askDateD!=null){
+                a.askDate = utility.Ltime2Stime(a.askDateD);
+                a.askDateD = null;
+            }
         }
 
         return result;
@@ -80,10 +84,14 @@ public class AccountDao extends SqlSessionDaoSupportAbstract implements IAccount
         info.username = null;
 
         for (AccountInfo a : info.bills){
-            a.askDate = utility.Ltime2Stime(a.askDateD);
-            a.askDateD = null;
-            a.completeDate = utility.Ltime2Stime(a.completeDateD);
-            a.completeDateD = null;
+            if(a.askDateD!=null){
+                a.askDate = utility.Ltime2Stime(a.askDateD);
+                a.askDateD = null;
+            }
+            if(a.completeDateD!=null){
+                a.completeDate = utility.Ltime2Stime(a.completeDateD);
+                a.completeDateD = null;
+            }
         }
 
         return info;

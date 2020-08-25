@@ -114,6 +114,7 @@ public class AccountService implements  IAccountService{
         try{
             accountDao.assignment(assignee,billIds);
         }catch(Exception e){
+            e.printStackTrace();
             return "0";
         }
         return "1";
@@ -131,6 +132,7 @@ public class AccountService implements  IAccountService{
         try{
             accountDao.repair(repairRemark, billIds,LocalDateTime.now());
         }catch(Exception e){
+            e.printStackTrace();
             return "0";
         }
         return "1";

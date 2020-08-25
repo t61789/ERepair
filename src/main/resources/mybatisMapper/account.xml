@@ -56,7 +56,7 @@
 	</insert>
 	<select id="assignmentCheck" resultType="com.zzu.erepair.account.bean.AccountInfo">
 		SELECT
-			bill_id,
+			bill_id as billId,
 			building,
 			floor,
 			equipment_name,
@@ -69,7 +69,7 @@
 		FROM
 			bill
 	</select>
-	<select id="assignmentAssignees" resultType="com.zzu.erepair.account.bean.AccountInfo">
+	<select id="assignmentAssignees" resultType="java.lang.String">
 		SELECT
 			username
 		FROM
