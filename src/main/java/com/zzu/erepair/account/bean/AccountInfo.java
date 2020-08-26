@@ -12,6 +12,7 @@ public class AccountInfo {
     public int building;
     public int floor;
     public String equipmentName;
+    public String equipmentType;
     public String askRepairName;
     public String remark;
     public String imgURL;
