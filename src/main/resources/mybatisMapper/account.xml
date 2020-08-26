@@ -97,7 +97,7 @@
 			ask_date AS askDateD,
 			state,
 			complete_date AS completeDateD,
-			repair_remark
+			repair_remark AS repairRemark
 		FROM
 			bill
 		WHERE
