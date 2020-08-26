@@ -16,7 +16,7 @@
 	</select>
 	<select id="askRepairCheck" resultType="com.zzu.erepair.account.bean.AccountInfo">
 		SELECT
-			bill_id,
+			bill_id as billId,
 			building,
 			floor,
 			equipment_name,
