@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>设备维修</title>
-    <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -53,6 +52,9 @@
                 }
 
 
+            })
+            vm.send("askRepairCheck",null,function (msg) {
+                
             })
         }
 
