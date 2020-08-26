@@ -55,7 +55,6 @@ public interface IAccountDao {
 
     void assignment(String assignee,int[] billIds);
 
-    // billId
     // building
     // floor
     // equipmentName

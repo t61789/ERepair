@@ -75,7 +75,6 @@ public class AccountService implements  IAccountService{
         return "-1";
     }
 
-    // billId
     // building
     // floor
     // equipmentName

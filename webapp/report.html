@@ -13,14 +13,28 @@
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
 
     <script>
         let vue;
         window.onload = function () {
+            axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+            axios.defaults.headers['charset'] = 'UTF-8';
             vue = new Vue({
                 el: '#app',
                 data: {
-                    billList: []
+                    billList: [],
+                    floors: [],
+                    equipmentNames: [],
+                    buildings: [],
+                    equipmentTypes: [],
+                    building: "---请选择---",
+                    floor: "---请选择---",
+                    equipmentName: "---请选择---",
+                    remark: "",
+                    imgURL: "",
+                    position: "",
+                    equipmentType: "---请选择---"
                 },
                 methods: {
                     send: function (url, data, suc) {
@@ -49,6 +63,61 @@
                             }
                             vue.billList = msg.bills;
                         });
+                    },
+                    askRepairNewCheck: function () {
+                        this.send("askRepairNewCheck", null, function (msg) {
+                            vue.floors = msg.floors;
+                            vue.equipmentNames = msg.equipmentNames;
+                            vue.buildings = msg.buildings;
+                            vue.equipmentTypes = msg.equipmentTypes;
+                        });
+                    },
+                    askRepairUploadImg: function () {
+                        let bikeImgForm = new FormData();
+                        bikeImgForm.append("img", vue.$refs.reportImg.files[0]);
+                        axios.post("askRepairUploadImg",
+                            bikeImgForm).then((response) => {
+                            if (response.data == "-1")
+                                alert("发生未知错误，请稍后再试");
+                            else
+                                vue.imgURL = response;
+                        });
+
+                        // {headers: {'Content-Type': 'multipart/form-data'}}
+                    },
+                    askRepairNew: function () {
+                        if (vue.building === "---请选择---" ||
+                            vue.floor === "---请选择---" ||
+                            vue.equipmentName === "---请选择---" ||
+                            vue.position === "" ||
+                            vue.equipmentType === "---请选择---")
+                            return;
+                        this.send("askRepairNew", {
+                            building: vue.building,
+                            floor: vue.floor,
+                            equipmentName: vue.equipmentName,
+                            remark: vue.remark,
+                            imgURL: vue.imgURL,
+                            position: vue.position,
+                            equipmentType: vue.equipmentType
+                        }, function (msg) {
+                            if (msg == "0")
+                                alert("发生未知错误，请稍后再试");
+                            else
+                                window.location.reload();
+                        });
+                    },
+                    setBuilding: function (msg) {
+                        vue.building = msg;
+                    },
+                    setFloor: function (msg) {
+                        vue.floor = msg;
+                    },
+                    setEquipmentType: function (msg) {
+                        vue.equipmentType = msg;
+                    },
+                    setEquipmentName: function (msg) {
+                        vue.equipmentName = msg;
                     }
                 }
             });
@@ -58,24 +127,144 @@
     </script>
 </head>
 <body>
-    <div id="app">
-        <button class="btn btn-default">设备报修</button>
-        <table class="table table-bordered">
-            <tr><td>#</td><td>报修单号</td><td>楼栋号</td><td>楼层</td><td>设备名称</td><td>报修人</td><td>备注</td><td>图片</td><td>具体位置</td><td>状态</td><td>报修时间</td></tr>
-            <tr v-for="bill in billList">
-                <td></td>
-                <td>{{bill.billId}}</td>
-                <td>{{bill.building}}号楼</td>
-                <td>{{bill.floor}}层</td>
-                <td>{{bill.equipmentName}}</td>
-                <td>{{bill.askRepairName}}</td>
-                <td>{{bill.remark}}</td>
-                <td>{{bill.imgURL}}</td>
-                <td>{{bill.position}}</td>
-                <td>{{bill.stateStr}}</td>
-                <td>{{bill.askDate}}</td>
-            </tr>
-        </table>
+<div id="app">
+
+    <button class="btn btn-default" data-toggle="modal" data-target="#myModal" @click="askRepairNewCheck()">设备报修
+    </button>
+
+    <div class=" modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">报修</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>保修单号</td>
+                            <td><input type="input" class="input-group" placeholder="自动分配" disabled="true"/></td>
+                            <td>楼栋号</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">{{building}}</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li v-for="item in buildings">
+                                            <a href='#' @click="setBuilding(item)">{{item}}号楼</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>楼层</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">{{floor}}</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li v-for="item in floors">
+                                            <a href='#' @click="setFloor(item)">{{item}}层</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>设备类型</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">{{equipmentType}}</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li v-for="item in equipmentTypes">
+                                            <a href='#' @click="setEquipmentType(item)">{{item}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>设备名</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default">{{equipmentName}}</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li v-for="item in equipmentNames">
+                                            <a href='#' @click="setEquipmentName(item)">{{item}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>具体位置</td>
+                            <td><input type="input" class="input-group" v-model="position" placeholder="具体位置"/></td>
+                        </tr>
+                        <tr>
+                            <td>图片</td>
+                            <td>
+                                <input type="file" v-if="imgURL == ''" @change="askRepairUploadImg()" ref="reportImg">上传图片</input>
+                                <img v-if="imgURL != ''" :src="imgURL" class="img-thumbnail"/>
+                            </td>
+                            <td>备注</td>
+                            <td><input type="input" class="input-group" v-model="remark" placeholder="备注"/></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary" @click="askRepairNew()">
+                        提交
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+    <table class="table table-bordered">
+        <tr>
+            <td>#</td>
+            <td>报修单号</td>
+            <td>楼栋号</td>
+            <td>楼层</td>
+            <td>设备名称</td>
+            <td>报修人</td>
+            <td>备注</td>
+            <td>图片</td>
+            <td>具体位置</td>
+            <td>状态</td>
+            <td>报修时间</td>
+        </tr>
+        <tr v-for="bill in billList">
+            <td></td>
+            <td>{{bill.billId}}</td>
+            <td>{{bill.building}}号楼</td>
+            <td>{{bill.floor}}层</td>
+            <td>{{bill.equipmentName}}</td>
+            <td>{{bill.askRepairName}}</td>
+            <td>{{bill.remark}}</td>
+            <td><img :src="bill.imgURL" class="img-thumbnail"/></td>
+            <td>{{bill.position}}</td>
+            <td>{{bill.stateStr}}</td>
+            <td>{{bill.askDate}}</td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

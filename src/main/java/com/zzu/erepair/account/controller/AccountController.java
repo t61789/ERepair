@@ -61,7 +61,7 @@ public class AccountController {
 
     @RequestMapping("/askRepairUploadImg")
     @ResponseBody
-    public Object askRepairUploadImg(@RequestParam MultipartFile img) {
+    public Object askRepairUploadImg(MultipartFile img) {
 
         Object result = "-1";
         try {

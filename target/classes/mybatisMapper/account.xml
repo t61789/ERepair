@@ -16,11 +16,11 @@
 	</select>
 	<select id="askRepairCheck" resultType="com.zzu.erepair.account.bean.AccountInfo">
 		SELECT
-			bill_id,
+			bill_id as billId,
 			building,
 			floor,
-			equipment_name,
-			ask_repair_name,
+			equipment_name as equipmentName,
+			ask_repair_name as askRepairName,
 			remark,
 			img_url AS imgURL,
 			position,
@@ -31,8 +31,7 @@
 	</select>
 	<insert id="askRepairNew" parameterType="com.zzu.erepair.account.bean.AccountInfo">
 		INSERT INTO bill (
-			username,
-			bill_id,
+			ask_repair_name,
 			building,
 			floor,
 			equipment_name,
@@ -43,7 +42,6 @@
 			ask_date )
 		VALUES (
 			#{username},
-			#{billId},
 			#{building},
 			#{floor},
 			#{equipmentName},
