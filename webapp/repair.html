@@ -55,6 +55,14 @@
             })
             vm.send("askRepairCheck",null,function (msg) {
                 billList = msg.bills;
+                for (row in billList){
+                    if(billList.state == 0)
+                        billList.stateStr = "报修";
+                    else if (billList.state == 1)
+                        billList.stateStr = "受理";
+                    else if(billList.state == 2)
+                        billList.stateStr == "完成";
+                }
             })
         }
 
