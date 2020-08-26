@@ -57,11 +57,11 @@
             vm.send("repairCheck",null,function (msg) {
                 vm.billList = msg.bills;
                 for (row in vm.billList){
-                    if(vm.billList.state == 0)
+                    if(vm.billList[row].state == 0)
                         vm.billList.stateStr = "报修";
-                    else if (vm.billList.state == 1)
+                    else if (vm.billList[row].state == 1)
                         vm.billList.stateStr = "受理";
-                    else if(vm.billList.state == 2)
+                    else if(vm.billList[row].state == 2)
                         vm.billList.stateStr = "完成";
                 }
             })
