@@ -54,7 +54,7 @@
 
 
             })
-            vm.send("askRepairCheck",null,function (msg) {
+            vm.send("repairCheck",null,function (msg) {
                 vm.billList = msg.bills;
                 for (row in vm.billList){
                     if(vm.billList.state == 0)
@@ -118,7 +118,7 @@
             <td>{{bill.remark}}</td>
             <td>{{bill.imgURL}}</td>
             <td>{{bill.position}}</td>
-            <td>{{bill.state}}</td>
+            <td>{{bill.stateStr}}</td>
             <td>{{bill.askDate}}</td>
             <td>{{bill.repairRemark}}</td>
             <td>{{bill.completeDate}}</td>
