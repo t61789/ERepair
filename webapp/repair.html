@@ -39,12 +39,13 @@
                         });
                     },
                     motaisend:function(){
-                        send("repair",{billIds:vm.billIds,repairRemark:vm.repairRemark},function (msg) {
+                        vm.send("repair",{billIds:vm.billIds,repairRemark:vm.repairRemark},function (msg) {
                             if(msg == 0)
                                 alert("失败")
                             else
                                 alert("成功")
                         })
+                        window.location.reload();
 
                     }
 
