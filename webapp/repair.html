@@ -3,79 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>设备维修</title>
-    <link rel="stylesheet" href="css/style.css"/>
-    <style>
-        .table11_6 table {
-            width:100%;
-            margin:15px 0;
-            border:0;
-        }
-        .table11_6 th {
-            background-color:#96C7ED;
-            color: #000000
-        }
-        .table11_6,.table11_6 th,.table11_6 td {
-            font-size:0.95em;
-            text-align:center;
-            padding:4px;
-            border-collapse:collapse;
-        }
-        .table11_6 th,.table11_6 td {
-            border: 1px solid #73b4e7;
-            border-width:1px 0 1px 0;
-            border:2px inset #ffffff;
-        }
-        .table11_6 tr {
-            border: 1px solid #ffffff;
-        }
-        .table11_6 tr:nth-child(odd){
-            background-color:#dcecf9;
-        }
-        .table11_6 tr:nth-child(even){
-            background-color:#ffffff;
-        }
-    </style>
-    <style>
-        .table11_6 table {
-            width:100%;
-            margin:15px 0;
-            border:0;
-        }
-        .table11_6 th {
-            background-color:#96C7ED;
-            color:#000000
-        }
-        .table11_6,.table11_6 th,.table11_6 td {
-            font-size:0.95em;
-            text-align:center;
-            padding:4px;
-            border-collapse:collapse;
-        }
-        .table11_6 th,.table11_6 td {
-            border: 1px solid #73b4e7;
-            border-width:1px 0 1px 0;
-            border:2px inset #ffffff;
-        }
-        .table11_6 tr {
-            border: 1px solid #ffffff;
-        }
-        .table11_6 tr:nth-child(odd){
-            background-color:#dcecf9;
-        }
-        .table11_6 tr:nth-child(even){
-            background-color:#ffffff;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
     <script>
-
-
+        let vm;
         window.onload = function () {
-
-            var v = new Vue({
+            vm = new Vue({
                 el: '#app',
-                data: {},
+                data: {
+                    eqname:"",
+                    billList:[],
+                    repairRemark:"",
+                    billIds:[]
+                },
                 methods: {
                     send: function (url, data, suc) {
                         $.ajax({
@@ -91,131 +39,81 @@
                             }
                         });
                     },
+                    motaisend:function(){
+                        send("repair",{billIds:vm.billIds,repairRemark:vm.repairRemark},function (msg) {
+                            if(msg == 0)
+                                alert("失败")
+                            else
+                                alert("成功")
+                        })
 
-                    //将数组内容写入指定id的标签
-                    id_write: function (id1, array) {
-                        var s = "";
-                        for (var i in array) {
-                            s += "<option>" + array[i] + "</option>"
-
-                        }
-                        $("#" + id1).html(s);
-
-                    },
-                    display: function (id2) {
-                        alert(123);
-                        var traget = document.getElementById(id2);
-                        if (traget.style.display === "none") {
-                            traget.style.display = "inline";
-                        } else {
-                            traget.style.display = "none";
-                        }
                     }
+
+
                 }
+
 
             })
-//获取保修的相关信息并展示
-            v.send("askRepairCheck", null, function (msg) {
-                var s = "<tr><td>保修单号</td>" +
-                    "<td>楼栋号</td>" +
-                    "<td>楼层</td>" +
-                    "<td>设备名称</td>" +
-                    "<td>报修人</td>" +
-                    "<td>备注</td>" +
-                    "<td>图片</td>" +
-                    "<td>具体位置</td>" +
-                    "<td>状态</td>" +
-                    "<td>报修时间</td></tr>";
-                for (var i in msg.bills) {
-                    s = "<tr><td>" + msg.bills[i].billId
-                        + "</td><td>" + msg.bills[i].building
-                        + "</td><td>" + msg.bills[i].floor
-                        + "</td><td>" + msg.bills[i].equipmentName +
-                        "</td><td>" + msg.bills[i].askRepairName +
-                        "</td><td>" + msg.bills[i].remark +
-                        "</td><td>" + msg.bills[i].imgURL +
-                        "</td><td>" + msg.bills[i].position +
-                        "</td><td>" + msg.bills[i].state +
-                        "</td><td>" + msg.bills[i].askDate +
-                        "</td></tr>"
-                }
-                $("#table").html(s);
-
-            });
-            //传入数据获取下拉框内容
-            v.send("askRepairNewCheck", null, function (msg) {
-                id_write("select1", msg.floors);
-                id_write("select2", msg.floors);
-                id_write("select3", msg.floors);
-                id_write("select4", msg.floors);
-
-
-            });
-         }
+        }
 
     </script>
+
+
 </head>
 <body>
 <div id = "app">
 <div>
-    <button type="button" @click=“display(’selects‘)” class="denglu">新增</button>
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        完成维修
+    </button>
+    设备名称
+        <input  input name="eqname" v-model="eqname" placeholder="设备名称" class="password same" />
+    </button>
 </div>
-<table class=table11_6 id="table"></table>
-<div id="selects" >
-
-    <table class=table11_6>
-        <tr>
-            <td>
-                <b>保修单号</b>
-                <input type="text"  name="billId" v-model="billId" placeholder="报修单号"
-                       class="username same"/>
-            </td>
-
-            <td>
-                <b>楼栋号</b>
-                <select id="select1" >
-
-                    <option>-请选择-</option>
-
-                </select>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <b>楼层</b>
-                <select id="select2" >
-
-                    <option>-请选择-</option>
-
-                </select>
-            </td>
-            <td>
-                <b>设备类型</b>
-                <select id="select3" >
-
-                    <option>-请选择-</option>
-
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <b>设备名</b>
-                <select id="select4" >
-
-                    <option>-请选择-</option>
-
-                </select>
-            </td>
-            <td>
-                <b>具体位置</b>
-                <input type="text"  name="position" v-model="position"
-                       placeholder="具体位置" class="username same"/>
-            </td>
+<!--    //模态框div-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    完成维修
+                </h4>
+            </div>
+            <div class="modal-body">
+                维修备注：
+                <br>
+                <input type="text" v-model = "repairRemark"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                </button>
+                <button type="button" @click = "motaisend" class="btn btn-primary">确定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+    <table class="table table-bordered" id="mainTable">
+        <tr><td>#</td><td>报修单号</td><td>楼栋号</td><td>楼层</td><td>设备名称</td><td>备注</td><td>图片</td><td>具体位置</td><td>状态</td><td>报修时间</td><td>维修备注</td><td>完成时间</td></tr>
+        <tr v-for="bill in billList">
+            <td><input v-if="bill.state < 2" type='checkbox' v-model='billIds' :value=bill.billId /></td>
+            <td>{{bill.billId}}</td>
+            <td>{{bill.building}}号楼</td>
+            <td>{{bill.floor}}层</td>
+            <td>{{bill.equipmentName}}</td>
+            <td>{{bill.remark}}</td>
+            <td>{{bill.imgURL}}</td>
+            <td>{{bill.position}}</td>
+            <td>{{bill.state}}</td>
+            <td>{{bill.askDate}}</td>
+            <td>{{bill.repairRemark}}</td>
+            <td>{{bill.completeDate}}</td>
         </tr>
     </table>
-</div>
+
 </div>
 </body>
 </html>
