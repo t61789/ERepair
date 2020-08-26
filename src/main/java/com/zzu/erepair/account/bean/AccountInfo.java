@@ -24,4 +24,11 @@ public class AccountInfo {
     public int[] buildings;
     public String[] equipmentTypes;
     public List<AccountInfo> bills;
+    public int[] billIds;
+    public String assignee;
+    public List<String> assignees;
+    public LocalDateTime completeDateD;
+    public String completeDate;
+    public String repairRemark;
+
 }
